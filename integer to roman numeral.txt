@@ -1,0 +1,106 @@
+Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
+
+Symbol       Value
+I             1
+V             5
+X             10
+L             50
+C             100
+D             500
+M             1000
+For example, 2 is written as II in Roman numeral, just two one's added together. 12 is written as XII, which is simply X + II. The number 27 is written as XXVII, which is XX + V + II.
+
+Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:
+
+I can be placed before V (5) and X (10) to make 4 and 9. 
+X can be placed before L (50) and C (100) to make 40 and 90. 
+C can be placed before D (500) and M (1000) to make 400 and 900.
+Given an integer, convert it to a roman numeral.
+Constraints:
+
+1 <= num <= 3999
+
+My solution:
+class Solution {
+public:
+    map<int,string>default_values;
+        //initializing the default values;
+    void init(){
+        default_values[0]="";
+         default_values[1]="I";
+        default_values[2]="II";
+        default_values[3]="III";
+        default_values[4]="IV";
+        default_values[5]="V";
+        default_values[6]="VI";
+        default_values[7]="VII";
+        default_values[8]="VIII";
+        default_values[9]="IX";
+        default_values[10]="X";
+        default_values[40]="XL";
+        default_values[400]="CD";
+        default_values[90]="XC";
+        default_values[900]="CM";
+        default_values[50]="L";
+        default_values[100]="C";
+        default_values[500]="D";
+        default_values[1000]="M";
+    }
+    string convert(int num){
+        string result="";
+        if(1<=num&&num<=10){
+            return default_values[num];
+        }else if(11<=num&&num<=39){
+            int mf=0,rm=0;
+            mf=num/10;
+            if(mf==1)result+=default_values[10];
+            else if(mf==2)result+=default_values[10]+default_values[10];
+            else if(mf==3) result+=default_values[10]+default_values[10]+default_values[10];
+            //now see the remainder
+            rm=num%10;
+            result+=convert(rm);
+        }else if(40<=num&&num<=49){
+            result+=default_values[40]+default_values[(num%10)];
+        }else if(50<=num&&num<=89){
+            result+=default_values[50];
+            int diff=num-50;
+            int mf=diff/10;
+            int rm=diff%10;
+           if(mf==1)result+=default_values[10];
+            else if(mf==2)result+=default_values[10]+default_values[10];
+            else if(mf==3)result+=default_values[10]+default_values[10]+default_values[10];
+            result+=convert(rm);
+        }else if(90<=num&&num<=99){
+            result+=default_values[90]+default_values[num%10];
+        }else if(100<=num&&num<=399){
+            int mf=num/100;
+            int rm=num%100;
+           if(mf==1)result+=default_values[100];
+            else if(mf==2)result+=default_values[100]+default_values[100];
+            else if(mf==3)result+=default_values[100]+default_values[100]+default_values[100];
+            result+=convert(rm);
+            
+        }else if(400<=num&&num<=499){
+            result+=default_values[400]+convert(num-400);
+        }else if (500<=num&&num<=899){
+            result+=default_values[500];
+            int diff=num-500;
+            int mf=diff/100;
+             if(mf==1)result+=default_values[100];
+            else if(mf==2)result+=default_values[100]+default_values[100];
+            else if(mf==3)result+=default_values[100]+default_values[100]+default_values[100];
+            result+=convert(diff%100);
+        }else if(900<=num&&num<=999){
+            result+=default_values[900]+convert(num-900);
+        }else if(num>=1000){
+            result+=default_values[1000]+convert(num-1000);
+        }
+        return result;
+    }
+       
+    string intToRoman(int num) {
+        init();
+        return convert(num);
+        
+    }
+};
