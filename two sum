@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+       map<int,int>result;
+        vector<int>res;
+        for(int i=0;i<nums.size();i++){
+           if(result.find(target-nums[i])!=result.end()){
+               //element is there
+               res.push_back(result[target-nums[i]]);
+               res.push_back(i);
+           }else{
+               result.insert({nums[i],i});
+           }
+       }
+        return res;
+    }
+};
